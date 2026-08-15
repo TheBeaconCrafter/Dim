@@ -40,8 +40,11 @@ A premium version is planned, which will offer additional subscription-based pai
 
 If you use a proxy such as Velocity or BungeeCord:
 - If you use Geyser, Floodgate must be installed on the backend server (where Grim is) so Grim can access the Floodgate API.
-- If you use ViaVersion, it must be installed on the backend server (where Grim is) ONLY.
-  Grim does not support having ViaVersion installed on the proxy, even if it is also installed on the backend.
+- ViaVersion is supported on the proxy when the proxy provides Grim's original-client-protocol bridge.
+  The BeaconLabsVelocity bridge sends the ViaVersion client protocol to Grim over
+  `beaconlabs:protocol_version`; install the updated Grim fork on each backend and
+  keep the backend free of ViaVersion. Without a compatible bridge, install ViaVersion
+  on the backend server (where Grim is) only.
 
 ## Resources
 

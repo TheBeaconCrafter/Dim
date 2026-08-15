@@ -35,7 +35,9 @@ public class FastBreak extends Check implements BlockBreakListener, PreViaPacket
     // For some reason these states flag and I don't know why.
     // Better to just exempt to not annoy legit players.
     private static final Set<StateType> EXEMPT_STATES = Set.of();
-    private final boolean clientOlderThanServer = PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion() > player.getClientVersion().getProtocolVersion();
+    private boolean clientOlderThanServer() {
+        return PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion() > player.getClientVersion().getProtocolVersion();
+    }
 
     public FastBreak(GrimPlayer playerData) {
         super(playerData);
@@ -70,7 +72,19 @@ public class FastBreak extends Check implements BlockBreakListener, PreViaPacket
             // TODO this lazy loads PacketEvents mappings for older versions for clients on versions older than the servers, increasing memory usage
             //  * its the only thing we use non-native mappings for behind ViaVersion
             //  * can we translate back "up" to server version and run check against server version to avoid loading older registries?
-            WrappedBlockState block = clientOlderThanServer ? WrappedBlockState.getByGlobalId(player.getClientVersion(), player.getViaTranslatedClientBlockID(blockBreak.block.getGlobalId())) : blockBreak.block;
+            WrappedBlockState block;
+            if (!clientOlderThanServer()) {
+                block = blockBreak.block;
+            } else if (ViaVersionUtil.isAvailable) {
+                block = WrappedBlockState.getByGlobalId(player.getClientVersion(), player.getViaTranslatedClientBlockID(blockBreak.block.getGlobalId()));
+            } else {
+                // With ViaVersion on the proxy there is no backend
+                // UserConnection to expose its mapping table. FastBreak only
+                // consumes the StateType, so keep the authoritative server
+                // state; blocks absent from the client registry were exempted
+                // above.
+                block = blockBreak.block;
+            }
 
             startBreak = System.currentTimeMillis() - (targetBlockPosition == null ? 50 : 0); // ???
             targetBlockPosition = blockBreak.position;

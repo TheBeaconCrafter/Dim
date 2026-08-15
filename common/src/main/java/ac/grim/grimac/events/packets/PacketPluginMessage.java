@@ -30,11 +30,11 @@ public class PacketPluginMessage extends PacketListenerAbstract {
         if (!"vv:proxy_details".equals(channelName)) return;
         final boolean usingProxy = ProxyAlertMessenger.isUsingProxy();
         // warn if they are using a proxy
-        if (usingProxy) {
+        if (usingProxy && !ProtocolVersionSyncListener.isSynchronized(user)) {
             LogUtil.warn(
-                    user.getName() + " seems to have connected through a proxy running ViaVersion. "
-                            + "Having ViaVersion installed on the proxy is incompatible with GrimAC and causes many issues. "
-                            + "Please remove ViaVersion from your proxy server and install it on your backend servers instead."
+                    user.getName() + " seems to have connected through a proxy running ViaVersion without a "
+                            + "Grim-compatible protocol bridge. Install the BeaconLabsVelocity bridge or "
+                            + "install ViaVersion on the backend server instead."
             );
         }
         // kick if they do not have a proxy configured OR they have ViaVersion installed on the backend

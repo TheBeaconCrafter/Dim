@@ -35,6 +35,12 @@ public final class SyncedTags {
 
     public SyncedTags(GrimPlayer player) {
         this.player = player;
+        updateClientVersion();
+    }
+
+    /** Rebuilds the supported tag set after a proxy supplies the real client version. */
+    public void updateClientVersion() {
+        synced.clear();
         ClientVersion version = player.getClientVersion();
         trackTags(BLOCK, id -> StateTypes.getById(VERSION.toClientVersion(), id),
                 SyncedTag.<StateType>builder(CLIMBABLE).defaults(BlockTags.CLIMBABLE.getStates()).supported(version.isNewerThanOrEquals(ClientVersion.V_1_16)),

@@ -5,6 +5,7 @@ import ac.grim.grimac.api.event.events.GrimJoinEvent;
 import ac.grim.grimac.api.event.events.GrimQuitEvent;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.platform.api.player.PlatformPlayer;
+import ac.grim.grimac.events.packets.ProxyAlertMessenger;
 import ac.grim.grimac.platform.api.player.PlatformPlayerCache;
 import ac.grim.grimac.utils.reflection.GeyserUtil;
 import com.github.retrooper.packetevents.PacketEvents;
@@ -17,6 +18,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerDataManager {
 
@@ -29,7 +31,9 @@ public class PlayerDataManager {
     }
 
     private final Set<User> exemptUsers = ConcurrentHashMap.newKeySet();
+    private final Set<User> pendingProxyUsers = ConcurrentHashMap.newKeySet();
     private final ConcurrentHashMap<User, GrimPlayer> playerDataMap = new ConcurrentHashMap<>();
+    private static final long PROXY_PROTOCOL_WAIT_MILLIS = 1000L;
 
     public boolean isExemptUser(@Nullable User user) {
         return user != null && exemptUsers.contains(user);
@@ -93,14 +97,40 @@ public class PlayerDataManager {
     }
 
     public void addUser(final @NotNull User user) {
-        if (shouldCheck(user)) {
-            GrimPlayer player = new GrimPlayer(user);
-            playerDataMap.put(user, player);
-            Channels.JOIN.fire(player);
+        if (!shouldCheck(user)) return;
+
+        // A proxy running ViaVersion presents the backend protocol to
+        // PacketEvents. Wait briefly for the optional bridge message so all
+        // version-dependent checks are constructed with the real client
+        // version instead of trying to repair final fields after login.
+        if (ProxyAlertMessenger.isUsingProxy() && pendingProxyUsers.add(user)) {
+            ((io.netty.channel.Channel) user.getChannel()).eventLoop().schedule(() -> {
+                if (pendingProxyUsers.remove(user)) {
+                    addUserNow(user);
+                }
+            }, PROXY_PROTOCOL_WAIT_MILLIS, TimeUnit.MILLISECONDS);
+            return;
         }
+
+        addUserNow(user);
+    }
+
+    /** Creates the player immediately after the proxy protocol bridge has synchronized it. */
+    public void addUserAfterProtocolSync(final @NotNull User user) {
+        if (playerDataMap.containsKey(user)) return;
+        pendingProxyUsers.remove(user);
+        if (shouldCheck(user)) addUserNow(user);
+    }
+
+    private void addUserNow(final @NotNull User user) {
+        if (playerDataMap.containsKey(user) || !shouldCheck(user)) return;
+        GrimPlayer player = new GrimPlayer(user);
+        playerDataMap.put(user, player);
+        Channels.JOIN.fire(player);
     }
 
     public GrimPlayer remove(final @NotNull User user) {
+        pendingProxyUsers.remove(user);
         return playerDataMap.remove(user);
     }
 

@@ -309,19 +309,7 @@ public class GrimPlayer implements GrimUser {
         this.uncertaintyHandler = new UncertaintyHandler(this); // must be after checkmanager
         this.pointThreeEstimator = new PointThreeEstimator(this);
 
-        if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
-            final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
-            possibleEyeHeights[2] = new double[]{0.4 * scale, 1.62 * scale, 1.27 * scale}; // Elytra, standing, sneaking (1.14)
-            possibleEyeHeights[1] = new double[]{1.27 * scale, 1.62 * scale, 0.4 * scale}; // sneaking (1.14), standing, Elytra
-            possibleEyeHeights[0] = new double[]{1.62 * scale, 1.27 * scale, 0.4 * scale}; // standing, sneaking (1.14), Elytra
-        } else if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) { // standing, sneaking Elytra
-            possibleEyeHeights[2] = new double[]{0.4, 1.62, 1.54}; // Elytra, standing, sneaking (1.13)
-            possibleEyeHeights[1] = new double[]{1.54, 1.62, 0.4}; // sneaking (1.9-1.13), standing, Elytra
-            possibleEyeHeights[0] = new double[]{1.62, 1.54, 0.4}; // standing, sneaking (1.9-1.13), Elytra
-        } else {
-            possibleEyeHeights[1] = new double[]{(double) (1.62f - 0.08f), (double) (1.62f)}; // sneaking, standing
-            possibleEyeHeights[0] = new double[]{(double) (1.62f), (double) (1.62f - 0.08f)}; // standing, sneaking
-        }
+        initializePossibleEyeHeights();
 
         // reload last
         reload();
@@ -659,6 +647,37 @@ public class GrimPlayer implements GrimUser {
     public ClientVersion getClientVersion() {
         // If temporarily null, assume server version...
         return Objects.requireNonNullElseGet(user.getClientVersion(), () -> ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion()));
+    }
+
+    /**
+     * Applies a client version learned from a proxy bridge. PacketEvents starts
+     * with the backend protocol when ViaVersion is only installed on the proxy,
+     * so refresh the few eagerly-created structures that depend on the version.
+     */
+    public void applyClientVersion(@NotNull ClientVersion clientVersion) {
+        ClientVersion previousVersion = getClientVersion();
+        user.setClientVersion(clientVersion);
+        if (previousVersion != clientVersion) {
+            initializePossibleEyeHeights();
+            tagManager.updateClientVersion();
+        }
+    }
+
+    private void initializePossibleEyeHeights() {
+        Arrays.fill(possibleEyeHeights, null);
+        if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_14)) {
+            final float scale = (float) compensatedEntities.self.getAttributeValue(Attributes.SCALE);
+            possibleEyeHeights[2] = new double[]{0.4 * scale, 1.62 * scale, 1.27 * scale}; // Elytra, standing, sneaking (1.14)
+            possibleEyeHeights[1] = new double[]{1.27 * scale, 1.62 * scale, 0.4 * scale}; // sneaking (1.14), standing, Elytra
+            possibleEyeHeights[0] = new double[]{1.62 * scale, 1.27 * scale, 0.4 * scale}; // standing, sneaking, Elytra
+        } else if (getClientVersion().isNewerThanOrEquals(ClientVersion.V_1_9)) { // standing, sneaking Elytra
+            possibleEyeHeights[2] = new double[]{0.4, 1.62, 1.54}; // Elytra, standing, sneaking
+            possibleEyeHeights[1] = new double[]{1.54, 1.62, 0.4}; // sneaking, standing, Elytra
+            possibleEyeHeights[0] = new double[]{1.62, 1.54, 0.4}; // standing, sneaking, Elytra
+        } else {
+            possibleEyeHeights[1] = new double[]{1.62f - 0.08f, 1.62f}; // sneaking, standing
+            possibleEyeHeights[0] = new double[]{1.62f, 1.62f - 0.08f}; // standing, sneaking
+        }
     }
 
     // Alright, someone at mojang decided to not send a flying packet every tick with 1.9
