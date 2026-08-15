@@ -3,6 +3,7 @@ package ac.grim.grimac.events.packets;
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.checks.impl.badpackets.BadPacketsB;
 import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.anticheat.update.*;
 import ac.grim.grimac.utils.blockplace.BlockPlaceResult;
 import ac.grim.grimac.utils.blockplace.ConsumesBlockPlace;
@@ -664,15 +665,43 @@ public class CheckManagerListener extends PacketListenerAbstract {
     }
 
     private static void handleFlying(GrimPlayer player, double x, double y, double z, float yaw, float pitch, boolean hasPosition, boolean hasLook, boolean onGround, TeleportAcceptData teleportData) {
+        // ViaVersion can emit look-only packets with a stale ground bit. They
+        // contain no movement and must not change the previous movement ground
+        // state or cause an idle prediction to start from the wrong state.
+        if (!hasPosition
+                && ProtocolVersionSyncListener.isSynchronized(player.user)
+                && !player.inVehicle()) {
+            onGround = player.packetStateData.packetPlayerOnGround;
+        }
+
+        if (hasPosition) {
+            player.packetStateData.movementPacketSequence++;
+        }
+
+        if (hasPosition
+                && ProtocolVersionSyncListener.isSynchronized(player.user)
+                && player.checkManager.getDebugHandler().isConsoleOutputEnabled()) {
+            LogUtil.info("[Dim proxy-debug] " + player.getName()
+                    + " movement-packet seq=" + player.packetStateData.movementPacketSequence
+                    + " inputSeq=" + player.packetStateData.inputPacketSequence
+                    + " inputAgeMs=" + (player.packetStateData.lastInputNanos == 0 ? -1 : (System.nanoTime() - player.packetStateData.lastInputNanos) / 1_000_000)
+                    + " from=" + player.x + "," + player.y + "," + player.z
+                    + " to=" + x + "," + y + "," + z
+                    + " delta=" + (x - player.x) + "," + (y - player.y) + "," + (z - player.z)
+                    + " ground=" + onGround + " look=" + hasLook);
+        }
+
         // ViaVersion can lose the ground bit while translating movement on a
         // proxy. Only apply this compatibility correction after the trusted
         // Dim protocol handshake, and only when collision data proves that the
         // player is standing within the normal movement threshold.
         if (!onGround
-                && ProtocolVersionSyncListener.isSynchronized(player.user)
+                && hasPosition
+                && y <= player.y + player.getMovementThreshold()
+                && ProtocolVersionSyncListener.isProtocolTranslated(player.user)
                 && !player.inVehicle()
                 && !player.isFlying
-                && Collisions.slowCouldPointThreeHitGround(player, player.x, player.y, player.z)) {
+                && Collisions.slowCouldPointThreeHitGround(player, x, y, z)) {
             onGround = true;
         }
 

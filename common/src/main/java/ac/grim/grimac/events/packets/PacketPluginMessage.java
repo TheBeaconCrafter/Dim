@@ -40,6 +40,7 @@ public class PacketPluginMessage extends PacketListenerAbstract {
     private void checkChannel(User user, String channelName, byte[] data) {
         if (!"vv:proxy_details".equals(channelName)) return;
         final boolean usingProxy = ProxyAlertMessenger.isUsingProxy();
+        LogUtil.info("[Dim proxy-debug] Received vv:proxy_details for " + user.getName() + " (bytes=" + data.length + ").");
         boolean synchronizedViaVersion = usingProxy && trySynchronizeViaVersionPayload(user, data);
         if (usingProxy && !synchronizedViaVersion && !ProtocolVersionSyncListener.isSynchronized(user)) {
             requestProtocolSync(user);
@@ -79,8 +80,13 @@ public class PacketPluginMessage extends PacketListenerAbstract {
             JsonObject payload = new JsonParser()
                     .parse(new String(data, StandardCharsets.UTF_8))
                     .getAsJsonObject();
-            if (!payload.has("version")) return false;
-            return ProtocolVersionSyncListener.synchronize(user, payload.get("version").getAsInt());
+            if (!payload.has("version")) {
+                LogUtil.warn("[Dim proxy-debug] vv:proxy_details for " + user.getName() + " has no client version: " + payload);
+                return false;
+            }
+            int protocol = payload.get("version").getAsInt();
+            LogUtil.info("[Dim proxy-debug] ViaVersion reported client protocol " + protocol + " for " + user.getName() + ".");
+            return ProtocolVersionSyncListener.synchronize(user, protocol, "ViaVersion vv:proxy_details");
         } catch (Exception ignored) {
             // Older ViaVersion builds may not send the JSON proxy-details
             // payload. Fall back to the BeaconLabs request/response channel.
@@ -103,6 +109,7 @@ public class PacketPluginMessage extends PacketListenerAbstract {
                          DataOutputStream output = new DataOutputStream(bytes)) {
                         output.writeUTF(uuid.toString());
                         output.flush();
+                        LogUtil.info("[Dim proxy-debug] Requesting protocol sync for " + user.getName() + " via " + ProtocolVersionSyncListener.REQUEST_CHANNEL + ".");
                         platformPlayer.sendPluginMessage(ProtocolVersionSyncListener.REQUEST_CHANNEL, bytes.toByteArray());
                     } catch (IOException exception) {
                         LogUtil.warn("Failed to request proxy protocol data for " + user.getName() + ".", exception);
@@ -114,6 +121,7 @@ public class PacketPluginMessage extends PacketListenerAbstract {
     }
 
     private static void warnIfProtocolBridgeIsMissing(User user) {
+        LogUtil.info("[Dim proxy-debug] Protocol sync status for " + user.getName() + ": " + ProtocolVersionSyncListener.isSynchronized(user) + ".");
         if (!ProtocolVersionSyncListener.isSynchronized(user)) {
             LogUtil.warn(
                     user.getName() + " seems to have connected through a proxy running ViaVersion without a "

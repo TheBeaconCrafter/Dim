@@ -5,6 +5,8 @@ import ac.grim.grimac.checks.debug.AbstractDebugHandler;
 import ac.grim.grimac.checks.type.PostPredictionListener;
 import ac.grim.grimac.platform.api.sender.Sender;
 import ac.grim.grimac.player.GrimPlayer;
+import ac.grim.grimac.utils.anticheat.LogUtil;
+import com.github.retrooper.packetevents.PacketEvents;
 import ac.grim.grimac.utils.anticheat.update.PredictionComplete;
 import ac.grim.grimac.utils.lists.EvictingQueue;
 import ac.grim.grimac.utils.math.Vector3dm;
@@ -112,6 +114,26 @@ public class DebugHandler extends AbstractDebugHandler implements PostPrediction
         listeners.removeIf(player -> player.platformPlayer != null && !player.platformPlayer.isOnline());
 
         if (outputToConsole) {
+            String backendVersion;
+            if (PacketEvents.getAPI() == null || PacketEvents.getAPI().getServerManager() == null) {
+                backendVersion = "unknown";
+            } else {
+                backendVersion = PacketEvents.getAPI().getServerManager().getVersion() + "/"
+                        + PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion();
+            }
+            LogUtil.info("[Dim proxy-debug] " + player.getName()
+                    + " movement-state client=" + player.getClientVersion() + "/" + player.getClientVersion().getProtocolVersion()
+                    + " inputSeq=" + player.packetStateData.inputPacketSequence
+                    + " movementSeq=" + player.packetStateData.movementPacketSequence
+                    + " backend=" + backendVersion + " (PacketEventsServer)"
+                    + " sprint=" + player.isSprinting
+                    + " sprintAttr=" + player.compensatedEntities.hasSprintingAttributeEnabled
+                    + " lastSprint=" + player.lastSprinting
+                    + " ground=" + player.onGround + "/" + player.lastOnGround
+                    + " packetGround=" + player.packetStateData.packetPlayerOnGround
+                    + " predicted=" + predicted
+                    + " actual=" + actually
+                    + " offset=" + offset);
             Sender consoleSender = GrimAPI.INSTANCE.getPlatformServer().getConsoleSender();
             consoleSender.sendMessage(p);
             consoleSender.sendMessage(a);
@@ -130,6 +152,10 @@ public class DebugHandler extends AbstractDebugHandler implements PostPrediction
         } else {
             return "red";
         }
+    }
+
+    public boolean isConsoleOutputEnabled() {
+        return outputToConsole;
     }
 
     @Override

@@ -662,6 +662,18 @@ public class GrimPlayer implements GrimUser {
     }
 
     /**
+     * Returns the protocol used by the backend connection for synthetic packet
+     * encoding. A proxy has already translated packets to the backend protocol,
+     * so this must not use the synchronized original-client protocol.
+     */
+    public ClientVersion getPacketVersion() {
+        if (synchronizedClientVersion != null) {
+            return ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion());
+        }
+        return getClientVersion();
+    }
+
+    /**
      * Applies a client version learned from a proxy bridge. PacketEvents must
      * continue decoding the already-translated backend packets with the
      * backend protocol, so this value is deliberately stored separately from

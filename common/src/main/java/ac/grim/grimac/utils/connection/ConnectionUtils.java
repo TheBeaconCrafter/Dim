@@ -49,7 +49,7 @@ public class ConnectionUtils {
         Objects.requireNonNull(packetTypeData, "packetTypeData");
 
         int packetId = packetTypeData.getPacketType() != null
-                ? packetTypeData.getPacketType().getId(player.getClientVersion())
+                ? packetTypeData.getPacketType().getId(player.getPacketVersion())
                 : packetTypeData.getNativePacketId();
         Object prevBuffer = wrapper.buffer;
         wrapper.buffer = buffer;

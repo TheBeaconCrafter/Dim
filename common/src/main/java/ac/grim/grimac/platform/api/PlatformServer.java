@@ -12,5 +12,9 @@ public interface PlatformServer {
 
     void registerOutgoingPluginChannel(String name);
 
+    /** Registers a backend-to-plugin incoming channel where the platform supports it. */
+    default void registerIncomingPluginChannel(String name) {
+    }
+
     double getTPS();
 }

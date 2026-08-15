@@ -3,6 +3,7 @@ package ac.grim.grimac.events.packets;
 import ac.grim.grimac.GrimAPI;
 import ac.grim.grimac.player.GrimPlayer;
 import ac.grim.grimac.predictionengine.predictions.input.InputTransformer;
+import ac.grim.grimac.utils.anticheat.LogUtil;
 import ac.grim.grimac.utils.collisions.datatypes.SimpleCollisionBox;
 import ac.grim.grimac.utils.data.KnownInput;
 import ac.grim.grimac.utils.data.packetentity.JumpableEntity;
@@ -80,6 +81,19 @@ public class PacketPlayerSteer extends PacketListenerAbstract {
             }
 
             player.packetStateData.knownInput = new KnownInput(input.isForward(), input.isBackward(), input.isLeft(), input.isRight(), input.isJump(), input.isShift(), input.isSprint());
+            player.packetStateData.inputPacketSequence++;
+            player.packetStateData.lastInputNanos = System.nanoTime();
+            if (player.checkManager.getDebugHandler().isConsoleOutputEnabled()) {
+                LogUtil.info("[Dim proxy-debug] " + player.getName()
+                        + " player-input seq=" + player.packetStateData.inputPacketSequence
+                        + " forward=" + input.isForward()
+                        + " backward=" + input.isBackward()
+                        + " left=" + input.isLeft()
+                        + " right=" + input.isRight()
+                        + " jump=" + input.isJump()
+                        + " shift=" + input.isShift()
+                        + " sprint=" + input.isSprint());
+            }
         } else if (event.getPacketType() == PacketType.Play.Client.PLAYER_ROTATION) {
             GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(event.getUser());
             if (player == null || !player.inVehicle() || player.getClientVersion().isOlderThan(ClientVersion.V_1_21_2)) return;

@@ -32,6 +32,19 @@ public class BukkitPlatformServer implements PlatformServer {
     }
 
     @Override
+    public void registerIncomingPluginChannel(String name) {
+        GrimACBukkitLoaderPlugin.LOADER.getServer().getMessenger().registerIncomingPluginChannel(
+                GrimACBukkitLoaderPlugin.LOADER,
+                name,
+                (channel, player, message) -> {
+                    // PacketEvents receives and decodes the raw payload. Bukkit
+                    // still requires an incoming registration for proxy messages
+                    // to reach the backend plugin pipeline.
+                }
+        );
+    }
+
+    @Override
     public double getTPS() {
         // Folia throws UnsupportedOperationException on calling getTPS(), there is no API for getting TPS on Folia
         if (GrimAPI.INSTANCE.getPlatform() == Platform.FOLIA) {
