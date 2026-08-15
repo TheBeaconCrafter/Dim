@@ -1,40 +1,27 @@
-# Contributing to GrimAC
+# Contributing to Dim
 
-Thank you for your interest in contributing to GrimAC. This document outlines the guidelines for
-making pull
-requests to the project. *We're usually pretty lenient with pull requests, but this guide will help
-make the process go more smoothly.*
+Thank you for contributing to Dim. Dim is a GPLv3-licensed fork of GrimAC; preserve existing attribution, license headers, and third-party notices when modifying upstream-derived code.
 
-### Pull Request Guidelines
+## Pull requests
 
-- **Compatibility**
-  - Any changes must be compatible with
-  the [supported environments](https://github.com/GrimAnticheat/Grim/wiki/Supported-environments) (Spigot, Paper, Folia, Fabric, etc.)
-  - The plugin must be compatible with minecraft versions 1.8 and higher. Exempting checks from specific versions is acceptable.
-  - The plugin must be able to run on Java 17 or higher. Changes that don't support Java 17 at runtime will not be accepted.
+- Keep changes compatible with Bukkit, Spigot, Paper, Folia, Purpur, and Fabric where applicable.
+- Prefer focused changes that can be cleanly synchronized with upstream.
+- Do not package proprietary dependencies or remove required source/license notices.
+- Add comments for complex logic and test changes before opening a pull request.
+- Use clear commit messages and include reproduction steps for bug fixes.
 
-- **Non-acceptable pull requests**
-  - Heuristic-based checks will not be accepted; however, basic rate limiting such as blocking attacks based on CPS is acceptable.
-  - Checks that can be easily circumvented that don't block packets or fix anything are likely to not be accepted.
-  - Checks or features that are too specific to a single environment or minecraft version are likely to not be accepted.
-  - Changes that require large or unnecessary dependencies will likely not be accepted.
+## Upstream changes
 
-- **Pull request formatting**
-  - Create a new branch for your feature or fix when forking the repository.
-  - Reference related issues in your pull request description if applicable.
-  - Write clear and descriptive commit messages.
+Read [UPSTREAM.md](UPSTREAM.md) before bringing changes from GrimAC. Keep the `ac.grim.grimac` namespace, public API names, internal compatibility keys, and legacy command aliases unless a change is required for correctness.
 
-- **Code styling**
-  - Add code comments for complex logic or significant changes.
-  - Try to keep your code clean and avoid duplication.
-  - Thoroughly test your changes before submitting your pull request.
+## Development
 
-### Development Notes
+Dim uses Gradle Kotlin scripts. Java 17 is required at runtime; the current build toolchain may require a newer JDK for the target Minecraft versions. Run:
 
-- GrimAC is built using [Gradle](https://gradle.org/) kotlin scripts.
-- Java 21 is currently required to build the project. A minimum of Java 17 is required to run it.
+```bash
+./gradlew build --no-daemon
+```
 
-### Questions & Support
+## Security
 
-- Join our [Discord](https://discord.grim.ac) if you have questions or need assistance.
-- Refer to the [Wiki](https://github.com/GrimAnticheat/Grim/wiki) for project documentation.
+Please report security issues privately through the repository's security reporting mechanism rather than publishing an exploitable bypass in an issue.

@@ -68,10 +68,10 @@ dependencies {
 }
 
 bukkit {
-    name = "GrimAC"
-    author = "GrimAC"
+    name = "Dim"
+    author = "TheBeaconCrafter"
     main = "ac.grim.grimac.platform.bukkit.GrimACBukkitLoaderPlugin"
-    website = "https://grim.ac/"
+    website = "https://github.com/TheBeaconCrafter/Dim"
     apiVersion = "1.13"
     foliaSupported = true
 
@@ -147,7 +147,7 @@ bukkit {
         }
 
         register("grim.disabled") {
-            description = "Disable Grim checks while keeping player state tracked"
+            description = "Disable Dim checks while keeping player state tracked"
             default = Permission.Default.FALSE
         }
 

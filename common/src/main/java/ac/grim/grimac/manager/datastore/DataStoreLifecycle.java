@@ -1054,7 +1054,7 @@ public final class DataStoreLifecycle implements StartableInitable, StoppableIni
     }
 
     public synchronized void reload() {
-        logger.info("[grim-datastore] /grim reload: tearing down datastore...");
+        logger.info("[grim-datastore] /dim reload: tearing down datastore...");
         close();
         start();
     }

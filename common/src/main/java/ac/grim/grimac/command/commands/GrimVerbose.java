@@ -17,7 +17,7 @@ public class GrimVerbose implements BuildableCommand {
     @Override
     public void register(CommandManager<Sender> commandManager, CloudPlatformCommandArguments arguments) {
         commandManager.command(
-                commandManager.commandBuilder("grim", "grimac")
+                commandManager.commandBuilder("dim", "grim", "grimac")
                         .literal("verbose")
                         .permission("grim.verbose")
                         .handler(this::handleVerbose)

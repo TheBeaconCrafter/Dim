@@ -1,9 +1,11 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-Vulnerability must be reproducible on the latest grim commit.
+Security issues should be tested against the latest Dim commit or release.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-If there's a major bypass that would affect gameplay if reported publicly then join Grim's discord [here](https://discord.com/invite/kqQAhTmkUF) and reach out to staff.
+Please report exploitable bypasses and vulnerabilities privately through [Dim's security advisories](https://github.com/TheBeaconCrafter/Dim/security/advisories/new). Include the affected version, platform, reproduction steps, and any relevant logs. Do not publish a working bypass before maintainers have had an opportunity to respond.
+
+Dim is a modified fork of GrimAC. If an issue is demonstrably present in an unmodified upstream release, it may also be appropriate to report it to [upstream GrimAC](https://github.com/GrimAnticheat/Grim/security/advisories/new), while preserving the attribution and license terms described in `ATTRIBUTIONS.md`.

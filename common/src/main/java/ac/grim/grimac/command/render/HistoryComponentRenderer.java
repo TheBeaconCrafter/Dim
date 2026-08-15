@@ -68,7 +68,7 @@ public final class HistoryComponentRenderer {
      * {@code ongoingSessionId} (optional) is the player's currently-active
      * sessionId from SessionTracker; the matching row shows "current" as its
      * duration. Per-row click / copy-paste detail commands always use the
-     * disambiguated {@code /grim history player <target>} form so a shared
+     * disambiguated {@code /dim history player <target>} form so a shared
      * or re-run command can't dead-end on a literal-collision player name.
      */
     public static @NotNull List<Component> renderSessionList(
@@ -120,7 +120,7 @@ public final class HistoryComponentRenderer {
         String crashedMarker = (!ongoing && s.endedUnexpectedly())
                 ? cfg.getStringElse("grim-history-crashed-marker", " &8(&ccrashed&8)")
                 : "";
-        String detailCommand = "/grim history player " + playerDisplayName + " session " + s.sessionOrdinal();
+        String detailCommand = "/dim history player " + playerDisplayName + " session " + s.sessionOrdinal();
         RenderedTemplate rendered = parse(sender, cfg, "grim-history-session", SESSION_ROW_FALLBACK,
                 Map.ofEntries(
                         // Only sanitize untrusted leaves; keep operator-configured fragments intact.
@@ -348,7 +348,7 @@ public final class HistoryComponentRenderer {
      * unique-check-count is recomputed from the filtered violations; bucket
      * size and session metadata stay as-is.
      *
-     * <p>Used by {@code /grim history --name <regex>} / {@code --match
+     * <p>Used by {@code /dim history --name <regex>} / {@code --match
      * <regex>} / {@code --grep <regex>} flag handling — pre-filtering at
      * the renderer keeps the rest of the rendering pipeline filter-agnostic.
      */

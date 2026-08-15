@@ -10,6 +10,7 @@ import ac.grim.grimac.platform.api.player.PlatformPlayerCache;
 import ac.grim.grimac.utils.reflection.GeyserUtil;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.netty.channel.ChannelHelper;
+import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.protocol.player.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -116,10 +117,14 @@ public class PlayerDataManager {
     }
 
     /** Creates the player immediately after the proxy protocol bridge has synchronized it. */
-    public void addUserAfterProtocolSync(final @NotNull User user) {
+    public void addUserAfterProtocolSync(final @NotNull User user, final @NotNull ClientVersion clientVersion) {
         if (playerDataMap.containsKey(user)) return;
         pendingProxyUsers.remove(user);
-        if (shouldCheck(user)) addUserNow(user);
+        if (!shouldCheck(user)) return;
+
+        GrimPlayer player = new GrimPlayer(user, clientVersion);
+        playerDataMap.put(user, player);
+        Channels.JOIN.fire(player);
     }
 
     private void addUserNow(final @NotNull User user) {

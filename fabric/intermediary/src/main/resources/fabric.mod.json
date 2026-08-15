@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "grimac-fabric-intermediary",
+  "id": "dim-fabric-intermediary",
   "version": "${version}",
-  "name": "GrimAC",
+  "name": "Dim",
   "description": "Libre simulation anticheat designed for 26.1 with 1.8-26.1 support, powered by PacketEvents 2.0.",
   "authors": [
-    "GrimAC"
+    "Dim"
   ],
   "license": "GPLv3",
   "environment": "server",

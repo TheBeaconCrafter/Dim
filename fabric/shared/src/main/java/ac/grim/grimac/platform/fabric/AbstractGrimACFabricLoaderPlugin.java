@@ -85,7 +85,7 @@ public abstract class AbstractGrimACFabricLoaderPlugin<
         FabricResolverRegistrar resolverRegistrar = new FabricResolverRegistrar();
         GrimExtensionManager extensionManager = GrimAPI.INSTANCE.getExtensionManager();
         resolverRegistrar.registerAll(extensionManager);
-        plugin = extensionManager.getPlugin("GrimAC");
+        plugin = extensionManager.getPlugin("Dim");
     }
 
     @Override
@@ -147,7 +147,7 @@ public abstract class AbstractGrimACFabricLoaderPlugin<
             return createPlatformCommandService();
         } catch (Throwable t) {
             LogUtil.warn("IMPORTANT: Command Framework failed to load (Missing Cloud Library?). \n" +
-                    "Grim will run without commands enabled!");
+                    "Dim will run without commands enabled!");
             if (!(t instanceof NoClassDefFoundError)) {
                 LogUtil.error(t);
             }

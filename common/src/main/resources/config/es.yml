@@ -1,4 +1,4 @@
-# La configuración principal de GrimAC
+# La configuración principal de Dim
 # Código fuente: https://github.com/MWHunter/Grim
 # Copyright 2025 DefineOutside y contribuyentes, licenciado bajo GPLv3.
 # Binarios modificados o plugins con código de Grim deben ser privados o con
@@ -29,7 +29,7 @@ client-brand:
         - "^lunarclient:v\\d+\\.\\d+\\.\\d+-\\d{4},(?:fabric|forge)$"
         - "^Feather Fabric$"
         - "^labymod$"
-    # Grim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
+    # Dim will blacklist specific Forge versions which include built-in Reach hacks (Forge 1.18.2 to 1.19.3).
     # Setting this option to false will allow said clients to connect to the server. Disable this at your own risk.
     disconnect-blacklisted-forge-versions: true
 

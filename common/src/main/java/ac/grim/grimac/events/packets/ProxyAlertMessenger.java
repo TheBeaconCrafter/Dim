@@ -32,6 +32,7 @@ public class ProxyAlertMessenger extends PacketListenerAbstract {
         if (usingProxy) {
             LogUtil.info("Registering an outgoing plugin channel...");
             GrimAPI.INSTANCE.getPlatformServer().registerOutgoingPluginChannel("BungeeCord");
+            GrimAPI.INSTANCE.getPlatformServer().registerOutgoingPluginChannel(ProtocolVersionSyncListener.REQUEST_CHANNEL);
         }
     }
 

@@ -26,7 +26,7 @@ import java.sql.Statement;
 import java.util.logging.Logger;
 
 /**
- * {@code /grim history migrate [--delete]} — on-demand v0 → v1 migration outside
+ * {@code /dim history migrate [--delete]} — on-demand v0 → v1 migration outside
  * the startup path. Detects the legacy source by reading
  * {@code history.database.type / host / port / database / username / password}
  * from {@code config.yml} (the same keys the pre-cutover plugin wrote), builds
@@ -45,7 +45,7 @@ public class GrimHistoryMigrate implements BuildableCommand {
     @Override
     public void register(CommandManager<Sender> commandManager, CloudPlatformCommandArguments arguments) {
         commandManager.command(
-                commandManager.commandBuilder("grim", "grimac")
+                commandManager.commandBuilder("dim", "grim", "grimac")
                         .literal("history")
                         .literal("migrate")
                         .permission("grim.history.migrate")
@@ -101,7 +101,7 @@ public class GrimHistoryMigrate implements BuildableCommand {
             }
         } catch (BackendException e) {
             logBoth(sender, Component.text("Migration failed: " + e.getMessage(), NamedTextColor.RED));
-            LogUtil.error("Legacy migration failed via /grim history migrate", e);
+            LogUtil.error("Legacy migration failed via /dim history migrate", e);
         }
     }
 
@@ -112,13 +112,13 @@ public class GrimHistoryMigrate implements BuildableCommand {
                         source.jdbcUrl(), source.username(), source.password());
         // Legacy migration only targets SQLite today — V0Reader understands
         // the old grim_history_* schema and writes through SqliteBackend's
-        // bulk-import path. /grim history copy is the general-purpose
+        // bulk-import path. /dim history copy is the general-purpose
         // cross-backend hammer once more targets exist.
         SqliteBackend v1 = lifecycle.sqliteBackendForCommands();
         if (v1 == null) {
             throw new BackendException(
                     "no SQLite backend in routing — legacy migration needs SQLite as its target; "
-                            + "switch a category to sqlite in database.yml or use /grim history copy instead");
+                            + "switch a category to sqlite in database.yml or use /dim history copy instead");
         }
         CheckRegistry registry = lifecycle.checkRegistryForCommands();
         long gapMs = lifecycle.config().session().gapMs();

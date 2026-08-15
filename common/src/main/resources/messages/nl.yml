@@ -1,5 +1,5 @@
 # \u00BB is » (double >>), ANSI en UTF-8 interpreteren dit anders... je kunt zelfs "?" zien als gevolg hiervan
-prefix: "&bGrim &8\u00BB"
+prefix: "&bDim &8\u00BB"
 
 alerts-enabled: "%prefix% &fMeldingen ingeschakeld"
 alerts-disabled: "%prefix% &fMeldingen uitgeschakeld"
@@ -15,7 +15,7 @@ reload-failed: "%prefix% &cFailed to reload config."
 player-not-found: "%prefix% &cSpeler is vrijgesteld of offline!"
 player-not-this-server: "%prefix% &cSpeler is niet op deze server!"
 sender-not-found: "%prefix% &cJe kunt dit commando niet gebruiken als je vrijgesteld bent!"
-spectate-return: "<click:run_command:/grim stopspectating><hover:show_text:\"/grim stopspectating\">\n%prefix% &fKlik hier om terug te keren naar de vorige locatie\n</hover></click>"
+spectate-return: "<click:run_command:/dim stopspectating><hover:show_text:\"/dim stopspectating\">\n%prefix% &fKlik hier om terug te keren naar de vorige locatie\n</hover></click>"
 cannot-spectate-return: "%prefix% &cJe kunt dit alleen doen nadat je een speler hebt bekeken"
 cannot-run-on-self: "%prefix% &cJe kunt dit commando niet op jezelf gebruiken!"
 upload-log: "%prefix% &fDebug geüpload naar: %url%"
@@ -58,23 +58,24 @@ profile:
     - "&7======================"
 help:
     - "&7======================"
-    - "/grim alerts &f- &7Meldingen inschakelen"
-    - "/grim brands &f- &7Toggle brands"
-    - "/grim profile <player> &f- &7Bekijk speler info"
-    - "/grim help &f- &7Bekijk dit helpbericht"
-    - "/grim debug <player> &f- &7Voorspellingsuitvoer ontwikkelaar"
-    - "/grim perf &f- &7Ontwikkelaar ms/voorspelling"
-    - "/grim reload &f- &7Laadt de configuratie opnieuw"
-    - "/grim spectate <player> &f- &7Een speler bekijken"
-    - "/grim verbose &f- &7Toont elke flag, zonder buffers"
-    - "/grim log [0-255] &f- &7Uploadt een debug-log voor voorspellings-flaggen"
-    - "/grim history <player> &f- &7Sessielijst (nieuwste eerst)"
-    - "/grim history <player> page <N> &f- &7Spring naar pagina N van de sessielijst"
-    - "/grim history <player> session <N|latest> [-d] [-v] &f- &7Sessiedetail (nieuwste overtredingen eerst)"
-    - "/grim history <player> session <N|latest> page <N> [-d] [-v] &f- &7Sessiedetail, overtredingenpagina N"
+    - "/dim alerts &f- &7Meldingen inschakelen"
+    - "/dim brands &f- &7Toggle brands"
+    - "/dim profile <player> &f- &7Bekijk speler info"
+    - "/dim help &f- &7Bekijk dit helpbericht"
+    - "/dim info &f- &7Bekijk Dim-versie en naamsvermelding"
+    - "/dim debug <player> &f- &7Voorspellingsuitvoer ontwikkelaar"
+    - "/dim perf &f- &7Ontwikkelaar ms/voorspelling"
+    - "/dim reload &f- &7Laadt de configuratie opnieuw"
+    - "/dim spectate <player> &f- &7Een speler bekijken"
+    - "/dim verbose &f- &7Toont elke flag, zonder buffers"
+    - "/dim log [0-255] &f- &7Uploadt een debug-log voor voorspellings-flaggen"
+    - "/dim history <player> &f- &7Sessielijst (nieuwste eerst)"
+    - "/dim history <player> page <N> &f- &7Spring naar pagina N van de sessielijst"
+    - "/dim history <player> session <N|latest> [-d] [-v] &f- &7Sessiedetail (nieuwste overtredingen eerst)"
+    - "/dim history <player> session <N|latest> page <N> [-d] [-v] &f- &7Sessiedetail, overtredingenpagina N"
     - "&7======================"
 
-# === /grim history ===
+# === /dim history ===
 # Op sessies gebaseerde geschiedenis-UI. Alle regels hieronder zijn instelbare
 # MiniMessage-templates. Standaard hovers staan in inline
 # <hover:show_text:'...'>-tags en de hoverfragment-sleutels hieronder; verwijder
@@ -111,7 +112,7 @@ grim-history-crashed-marker: " &8(&cgecrasht&8)"
 #   %client_version% %client_brand% %duration% %timeago%
 #   %violations% %unique_checks% %bucket_size%
 grim-history-detail-header: "%prefix% &bDetails van sessie &f%ordinal% &bvan &f%player%&b:"
-grim-history-detail-meta1: "%prefix% &bGrim: &f%grim_version%&b, Server: &f%server_name%&b, Duur: &f%duration%&b, Datum: &7%timeago% geleden"
+grim-history-detail-meta1: "%prefix% &bDim: &f%grim_version%&b, Server: &f%server_name%&b, Duur: &f%duration%&b, Datum: &7%timeago% geleden"
 grim-history-detail-meta2: "%prefix% &bClient: &f%client_version%&b, Merk: &f%client_brand%"
 grim-history-detail-violations-header: "%prefix% &bOvertredingen: &8(%violations% totaal, %unique_checks% uniek)"
 grim-history-detail-empty: "%prefix% &7- (geen)"

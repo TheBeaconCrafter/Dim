@@ -20,7 +20,7 @@ public class GrimSpectate implements BuildableCommand {
     @Override
     public void register(CommandManager<Sender> commandManager, CloudPlatformCommandArguments arguments) {
         commandManager.command(
-                commandManager.commandBuilder("grim", "grimac")
+                commandManager.commandBuilder("dim", "grim", "grimac")
                         .literal("spectate")
                         .permission("grim.spectate")
                         .required("target", arguments.singlePlayerSelectorParser())
@@ -50,7 +50,7 @@ public class GrimSpectate implements BuildableCommand {
 
         // hide player from tab list
         if (GrimAPI.INSTANCE.getSpectateManager().enable(platformPlayer)) {
-            sender.sendMessage(MessageUtil.getParsedComponent(sender, "spectate-return", "<click:run_command:/grim stopspectating><hover:show_text:\"/grim stopspectating\">\n%prefix% &fClick here to return to previous location\n</hover></click>"));
+            sender.sendMessage(MessageUtil.getParsedComponent(sender, "spectate-return", "<click:run_command:/dim stopspectating><hover:show_text:\"/dim stopspectating\">\n%prefix% &fClick here to return to previous location\n</hover></click>"));
         }
 
         platformPlayer.setGameMode(GameMode.SPECTATOR);

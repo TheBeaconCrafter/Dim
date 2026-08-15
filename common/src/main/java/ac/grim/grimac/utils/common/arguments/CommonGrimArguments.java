@@ -18,7 +18,7 @@ public class CommonGrimArguments {
     public final static SystemArgument<Integer> URL_TIMEOUT = FACTORY.create(range("UrlTimeout", 10000, 1000, 60000));
 
     /**
-     * Enables "Fast Bypass" mode for chat messages sent by GrimAC.
+     * Enables "Fast Bypass" mode for chat messages sent by Dim.
      * <p>
      * <b>BENEFIT:</b> Messages are sent directly as packets, significantly improving
      * performance and reducing server overhead especially when lots of alerts are being sent.

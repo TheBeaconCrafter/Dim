@@ -11,7 +11,7 @@ import java.util.UUID;
  * closes when {@link #close} is called from the disconnect path. Each
  * observed activity publishes a {@code SessionEvent} upsert with the latest
  * {@code lastActivityEpochMs}, so the backend always has a recent heartbeat
- * for {@code /grim history}.
+ * for {@code /dim history}.
  *
  * <p>{@link #pollHeartbeat} is the periodic-bump entry point — called per
  * tick from {@code GrimPlayer.pollData}, throttled internally to emit at

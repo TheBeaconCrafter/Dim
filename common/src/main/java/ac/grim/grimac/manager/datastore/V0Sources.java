@@ -12,7 +12,7 @@ import java.util.Locale;
  * Builds a legacy migration source from either a plugin data folder (SQLite
  * file fallback) or the old {@code history.database.*} block in
  * {@code config.yml}. Shared by {@code DataStoreLifecycle.maybeMigrateLegacy}
- * at startup and by the {@code /grim history migrate} command at runtime so
+ * at startup and by the {@code /dim history migrate} command at runtime so
  * both paths route sources identically.
  */
 public final class V0Sources {

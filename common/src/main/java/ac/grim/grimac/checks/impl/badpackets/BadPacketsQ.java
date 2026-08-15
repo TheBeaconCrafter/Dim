@@ -25,10 +25,13 @@ public class BadPacketsQ extends Check implements PacketReceiveListener {
             int boost = wrapper.getJumpBoost();
             WrapperPlayClientEntityAction.Action action = wrapper.getAction();
             int entity = wrapper.getEntityId();
+            // This packet is only meaningful for horse jumping. Sprinting,
+            // sneaking, and other entity actions legitimately use a zero
+            // jump-boost field and must not reach this check.
+            if (action != WrapperPlayClientEntityAction.Action.START_JUMPING_WITH_HORSE) return;
+
             // you are able to send negative jump boost, how and why!?
-            if (Math.abs(boost) > 100
-                    || entity != player.entityID
-                    || wrapper.getAction() != WrapperPlayClientEntityAction.Action.START_JUMPING_WITH_HORSE && boost != 0) {
+            if (Math.abs(boost) > 100 || entity != player.entityID) {
                 int actionId = VerboseCodecs.enumId(action);
                 if (flag(V.write(verbose()).sint(boost).uint(actionId).sint(entity)) && shouldModifyPackets()) {
                     event.setCancelled(true);

@@ -664,6 +664,18 @@ public class CheckManagerListener extends PacketListenerAbstract {
     }
 
     private static void handleFlying(GrimPlayer player, double x, double y, double z, float yaw, float pitch, boolean hasPosition, boolean hasLook, boolean onGround, TeleportAcceptData teleportData) {
+        // ViaVersion can lose the ground bit while translating movement on a
+        // proxy. Only apply this compatibility correction after the trusted
+        // Dim protocol handshake, and only when collision data proves that the
+        // player is standing within the normal movement threshold.
+        if (!onGround
+                && ProtocolVersionSyncListener.isSynchronized(player.user)
+                && !player.inVehicle()
+                && !player.isFlying
+                && Collisions.slowCouldPointThreeHitGround(player, player.x, player.y, player.z)) {
+            onGround = true;
+        }
+
         long now = System.currentTimeMillis();
 
         if (!hasPosition) {

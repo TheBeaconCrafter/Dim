@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ProtocolVersionSyncListener extends PacketListenerAbstract {
 
     public static final String CHANNEL = "beaconlabs:protocol_version";
+    public static final String REQUEST_CHANNEL = "beaconlabs:protocol_request";
     private static final Set<User> SYNCHRONIZED_USERS = ConcurrentHashMap.newKeySet();
 
     @Override
@@ -56,28 +57,37 @@ public final class ProtocolVersionSyncListener extends PacketListenerAbstract {
             // The UUID prevents a queued message for another player from
             // changing this connection's protocol state.
             if (!messageUuid.equals(user.getUUID())) return;
-
-            ClientVersion clientVersion = ClientVersion.getById(protocol);
-            if (clientVersion == ClientVersion.UNKNOWN
-                    || clientVersion == ClientVersion.LOWER_THAN_SUPPORTED_VERSIONS
-                    || clientVersion == ClientVersion.HIGHER_THAN_SUPPORTED_VERSIONS) {
-                LogUtil.warn("Ignoring unsupported proxy protocol " + protocol + " for " + user.getName() + ".");
-                return;
-            }
-
-            GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(user);
-            if (player != null) {
-                player.applyClientVersion(clientVersion);
-            } else {
-                // If the sync arrives before Grim creates its player state,
-                // construct it now while the User has the correct version.
-                user.setClientVersion(clientVersion);
-                GrimAPI.INSTANCE.getPlayerDataManager().addUserAfterProtocolSync(user);
-            }
-            SYNCHRONIZED_USERS.add(user);
+            synchronize(user, protocol);
         } catch (Exception exception) {
             LogUtil.warn("Failed to read proxy protocol data for " + event.getUser().getName() + ".", exception);
         }
+    }
+
+    /**
+     * Applies a trusted protocol value supplied by ViaVersion or the proxy
+     * bridge. The User is the connection that delivered the payload, so the
+     * ViaVersion payload does not need a second UUID field.
+     */
+    public static boolean synchronize(@NotNull User user, int protocol) {
+        ClientVersion clientVersion = ClientVersion.getById(protocol);
+        if (clientVersion == ClientVersion.UNKNOWN
+                || clientVersion == ClientVersion.LOWER_THAN_SUPPORTED_VERSIONS
+                || clientVersion == ClientVersion.HIGHER_THAN_SUPPORTED_VERSIONS) {
+            LogUtil.warn("Ignoring unsupported proxy protocol " + protocol + " for " + user.getName() + ".");
+            return false;
+        }
+
+        GrimPlayer player = GrimAPI.INSTANCE.getPlayerDataManager().getPlayer(user);
+        if (player != null) {
+            player.applyClientVersion(clientVersion);
+        } else {
+            // If the sync arrives before Dim creates its player state,
+            // construct it with the simulation version while leaving the
+            // User's backend protocol intact for PacketEvents decoding.
+            GrimAPI.INSTANCE.getPlayerDataManager().addUserAfterProtocolSync(user, clientVersion);
+        }
+        SYNCHRONIZED_USERS.add(user);
+        return true;
     }
 
     @Override

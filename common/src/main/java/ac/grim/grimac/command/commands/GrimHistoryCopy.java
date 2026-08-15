@@ -19,7 +19,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 import java.util.Map;
 
 /**
- * {@code /grim history copy <src-backend-id> <dst-backend-id> [--delete]} —
+ * {@code /dim history copy <src-backend-id> <dst-backend-id> [--delete]} —
  * cross-backend copy of sessions + violations + player identities via
  * {@link BackendToBackendCopier}. The {@code --delete} flag wipes the source
  * after the copy completes.
@@ -41,7 +41,7 @@ public class GrimHistoryCopy implements BuildableCommand {
     @Override
     public void register(CommandManager<Sender> commandManager, CloudPlatformCommandArguments arguments) {
         commandManager.command(
-                commandManager.commandBuilder("grim", "grimac")
+                commandManager.commandBuilder("dim", "grim", "grimac")
                         .literal("history")
                         .literal("copy")
                         .permission("grim.history.copy")
@@ -115,7 +115,7 @@ public class GrimHistoryCopy implements BuildableCommand {
             }
         } catch (BackendException e) {
             logBoth(sender, Component.text("Copy failed: " + e.getMessage(), NamedTextColor.RED));
-            LogUtil.error("v1 copy failed via /grim history copy", e);
+            LogUtil.error("v1 copy failed via /dim history copy", e);
         }
     }
 

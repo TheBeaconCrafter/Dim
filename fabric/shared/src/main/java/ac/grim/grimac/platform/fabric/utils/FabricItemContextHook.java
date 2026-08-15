@@ -67,7 +67,7 @@ public final class FabricItemContextHook {
             } catch (Throwable t) {
                 // Older fabric-api/Polymer (PacketTweaker-based) tolerates a missing context, so failing to
                 // resolve the new API here is not fatal — degrade to a no-op pass-through.
-                LogUtil.info("[GrimAC] Polymer is present but fabric-api's PacketContext API is unavailable; "
+                LogUtil.info("[Dim] Polymer is present but fabric-api's PacketContext API is unavailable; "
                         + "leaving item encoding to Polymer's own context handling.");
             }
         }

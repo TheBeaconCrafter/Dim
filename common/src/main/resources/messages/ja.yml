@@ -1,5 +1,5 @@
 # \u00BB は » (二重 >>)です。ANSI と UTF-8 はこれを異なる方法で解釈します... 場合によっては ? と表示されることがあります。
-prefix: "&bGrim &8\u00BB"
+prefix: "&bDim &8\u00BB"
 
 alerts-enabled: "%prefix% &fアラートが有効になりました"
 alerts-disabled: "%prefix% &fアラートが無効になりました"
@@ -55,23 +55,24 @@ profile:
     - "&7======================"
 help:
     - "&7======================"
-    - "/grim alerts &f- &7アラートを切り替えます"
-    - "/grim brands &f- &7Toggle brands"
-    - "/grim profile <player> &f- &7プレイヤー情報を表示します"
-    - "/grim help &f- &7このヘルプメッセージを表示します"
-    - "/grim debug <player> &f- &7開発者用の予測出力を表示します"
-    - "/grim perf &f- &7開発者用のパフォーマンス (ms/予測)"
-    - "/grim reload &f- &7設定をリロードします"
-    - "/grim spectate <player> &f- &7プレイヤーを観戦します"
-    - "/grim verbose &f- &7全てのフラグをバッファなしで表示します"
-    - "/grim log [0-255] &f- &7予測フラグのデバッグログをアップロードします"
-    - "/grim history <player> &f- &7セッション一覧（新しい順）"
-    - "/grim history <player> page <N> &f- &7セッション一覧の N ページ目へ移動"
-    - "/grim history <player> session <N|latest> [-d] [-v] &f- &7セッション詳細（新しい違反順）"
-    - "/grim history <player> session <N|latest> page <N> [-d] [-v] &f- &7セッション詳細の違反 N ページ目"
+    - "/dim alerts &f- &7アラートを切り替えます"
+    - "/dim brands &f- &7Toggle brands"
+    - "/dim profile <player> &f- &7プレイヤー情報を表示します"
+    - "/dim help &f- &7このヘルプメッセージを表示します"
+    - "/dim info &f- &7Dimのバージョンと帰属を表示します"
+    - "/dim debug <player> &f- &7開発者用の予測出力を表示します"
+    - "/dim perf &f- &7開発者用のパフォーマンス (ms/予測)"
+    - "/dim reload &f- &7設定をリロードします"
+    - "/dim spectate <player> &f- &7プレイヤーを観戦します"
+    - "/dim verbose &f- &7全てのフラグをバッファなしで表示します"
+    - "/dim log [0-255] &f- &7予測フラグのデバッグログをアップロードします"
+    - "/dim history <player> &f- &7セッション一覧（新しい順）"
+    - "/dim history <player> page <N> &f- &7セッション一覧の N ページ目へ移動"
+    - "/dim history <player> session <N|latest> [-d] [-v] &f- &7セッション詳細（新しい違反順）"
+    - "/dim history <player> session <N|latest> page <N> [-d] [-v] &f- &7セッション詳細の違反 N ページ目"
     - "&7======================"
 
-# === /grim history ===
+# === /dim history ===
 # セッション単位の履歴 UI です。下記すべての行は設定可能な MiniMessage
 # テンプレートです。既定のホバーはインラインの <hover:show_text:'...'> タグと
 # 下記のホバー断片キーにあります。インラインホバーを消すとレンダラーの
@@ -107,7 +108,7 @@ grim-history-crashed-marker: " &8(&cクラッシュ&8)"
 #   %client_version% %client_brand% %duration% %timeago%
 #   %violations% %unique_checks% %bucket_size%
 grim-history-detail-header: "%prefix% &b&f%player% &bの第 &f%ordinal% &b回セッションの詳細："
-grim-history-detail-meta1: "%prefix% &bGrim: &f%grim_version%&b, サーバー: &f%server_name%&b, 時間: &f%duration%&b, 日時: &7%timeago% 前"
+grim-history-detail-meta1: "%prefix% &bDim: &f%grim_version%&b, サーバー: &f%server_name%&b, 時間: &f%duration%&b, 日時: &7%timeago% 前"
 grim-history-detail-meta2: "%prefix% &bクライアント: &f%client_version%&b, ブランド: &f%client_brand%"
 grim-history-detail-violations-header: "%prefix% &b違反: &8(合計 %violations% 件、ユニーク %unique_checks% 件)"
 grim-history-detail-empty: "%prefix% &7- (なし)"

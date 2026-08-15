@@ -47,7 +47,7 @@ public class GrimLog implements BuildableCommand {
             urlConn.setRequestMethod("POST");
             urlConn.setConnectTimeout(CommonGrimArguments.URL_TIMEOUT.value());
             urlConn.setReadTimeout(CommonGrimArguments.URL_TIMEOUT.value());
-            urlConn.addRequestProperty("User-Agent", "GrimAC/" + GrimAPI.INSTANCE.getExternalAPI().getGrimVersion());
+            urlConn.addRequestProperty("User-Agent", "Dim/" + GrimAPI.INSTANCE.getExternalAPI().getGrimVersion());
             urlConn.addRequestProperty("Content-Type", type); // Not really yaml, but looks nicer than plaintext
             urlConn.setRequestProperty("Content-Length", Integer.toString(log.length()));
             try (OutputStream stream = urlConn.getOutputStream()) {
@@ -72,7 +72,7 @@ public class GrimLog implements BuildableCommand {
 
     @Override
     public void register(CommandManager<Sender> commandManager, CloudPlatformCommandArguments arguments) {
-        Command<Sender> command = commandManager.commandBuilder("grim", "grimac")
+        Command<Sender> command = commandManager.commandBuilder("dim", "grim", "grimac")
                 .literal("log", "logs")
                 .permission("grim.log")
                 .required("flagId", IntegerParser.integerParser())

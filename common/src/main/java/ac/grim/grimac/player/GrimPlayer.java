@@ -108,6 +108,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GrimPlayer implements GrimUser {
     public final @NotNull User user;
     public final @NotNull UUID uuid;
+    // PacketEvents must retain the backend protocol for decoding packets that
+    // have already been translated by a proxy. Dim's simulation uses the
+    // original client protocol supplied by the proxy bridge instead.
+    private @Nullable ClientVersion synchronizedClientVersion;
     public int entityID;
     public @MonotonicNonNull PlatformPlayer platformPlayer;
     // Start transaction handling stuff
@@ -288,8 +292,13 @@ public class GrimPlayer implements GrimUser {
     public boolean canFloatWhileRidden;
 
     public GrimPlayer(@NotNull User user) {
+        this(user, null);
+    }
+
+    public GrimPlayer(@NotNull User user, @Nullable ClientVersion clientVersion) {
         this.user = Objects.requireNonNull(user, "user");
         this.uuid = Objects.requireNonNull(user.getUUID(), "uuid");
+        this.synchronizedClientVersion = clientVersion;
         this.fireworks = new CompensatedFireworks(this); // Must be before checkmanager
         this.inventory = new CompensatedInventory(this);
 
@@ -645,18 +654,22 @@ public class GrimPlayer implements GrimUser {
     }
 
     public ClientVersion getClientVersion() {
-        // If temporarily null, assume server version...
-        return Objects.requireNonNullElseGet(user.getClientVersion(), () -> ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion()));
+        // If temporarily null, assume server version. When a proxy bridge is
+        // active, keep User's backend protocol untouched for PacketEvents
+        // decoding and use the synchronized protocol only for simulation.
+        return Objects.requireNonNullElseGet(synchronizedClientVersion, () ->
+                Objects.requireNonNullElseGet(user.getClientVersion(), () -> ClientVersion.getById(PacketEvents.getAPI().getServerManager().getVersion().getProtocolVersion())));
     }
 
     /**
-     * Applies a client version learned from a proxy bridge. PacketEvents starts
-     * with the backend protocol when ViaVersion is only installed on the proxy,
-     * so refresh the few eagerly-created structures that depend on the version.
+     * Applies a client version learned from a proxy bridge. PacketEvents must
+     * continue decoding the already-translated backend packets with the
+     * backend protocol, so this value is deliberately stored separately from
+     * User#setClientVersion.
      */
     public void applyClientVersion(@NotNull ClientVersion clientVersion) {
         ClientVersion previousVersion = getClientVersion();
-        user.setClientVersion(clientVersion);
+        synchronizedClientVersion = clientVersion;
         if (previousVersion != clientVersion) {
             initializePossibleEyeHeights();
             tagManager.updateClientVersion();

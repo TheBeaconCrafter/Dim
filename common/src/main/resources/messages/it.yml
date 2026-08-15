@@ -1,5 +1,5 @@
 # » è » (doppia >>), ANSI e UTF-8 lo interpretano in modo diverso... si può anche vedere ? A causa di ciò
-prefix: "&bGrim &8\u00BB"
+prefix: "&bDim &8\u00BB"
 
 alerts-enabled: "%prefix% &fAlerts abilitati"
 alerts-disabled: "%prefix% &fAlerts disabilitati"
@@ -15,7 +15,7 @@ reload-failed: "%prefix% &cFailed to reload config."
 player-not-found: "%prefix% &cIl giocatore è esente o offline!"
 player-not-this-server: "%prefix% &cIl giocatore non è in questo server!"
 sender-not-found: "%prefix% &cNon puoi usare questo comando se sei esente!"
-spectate-return: "<click:run_command:/grim stopspectating><hover:show_text:\"/grim stopspectating\">\n%prefix% &fClicca qui per tornare alla posizione precedente\n</hover></click>"
+spectate-return: "<click:run_command:/dim stopspectating><hover:show_text:\"/dim stopspectating\">\n%prefix% &fClicca qui per tornare alla posizione precedente\n</hover></click>"
 cannot-spectate-return: "%prefix% &cPuoi farlo solo dopo aver osservato un giocatore"
 cannot-run-on-self: "%prefix% &cNon puoi usare questo comando su te stesso!"
 upload-log: "%prefix% &fDebug caricato su: %url%"
@@ -50,23 +50,24 @@ profile:
     - "&7======================"
 help:
     - "&7======================"
-    - "/grim alerts &f- &7Attiva/disattiva gli alerts"
-    - "/grim brands &f- &7Toggle brands"
-    - "/grim profile <giocatore> &f- &7Visualizza le informazioni del giocatore"
-    - "/grim help &f- &7Visualizza questo messaggio di aiuto"
-    - "/grim debug <giocatore> &f- &7Output di previsione dello sviluppatore"
-    - "/grim perf &f- &7Ms/predizione dello sviluppatore"
-    - "/grim reload &f- &7Ricarica la configurazione"
-    - "/grim spectate <giocatore> &f- &7Osserva un giocatore"
-    - "/grim verbose &f- &7Mostra ogni segnalazione a te, senza buffer"
-    - "/grim log [0-255] &f- &7Carica un registro di debug per le segnalazioni di previsione"
-    - "/grim history <player> &f- &7Lista delle sessioni (più recenti prima)"
-    - "/grim history <player> page <N> &f- &7Salta alla pagina N della lista delle sessioni"
-    - "/grim history <player> session <N|latest> [-d] [-v] &f- &7Dettaglio della sessione (violazioni più recenti prima)"
-    - "/grim history <player> session <N|latest> page <N> [-d] [-v] &f- &7Dettaglio della sessione, pagina N delle violazioni"
+    - "/dim alerts &f- &7Attiva/disattiva gli alerts"
+    - "/dim brands &f- &7Toggle brands"
+    - "/dim profile <giocatore> &f- &7Visualizza le informazioni del giocatore"
+    - "/dim help &f- &7Visualizza questo messaggio di aiuto"
+    - "/dim info &f- &7Visualizza versione e attribuzione di Dim"
+    - "/dim debug <giocatore> &f- &7Output di previsione dello sviluppatore"
+    - "/dim perf &f- &7Ms/predizione dello sviluppatore"
+    - "/dim reload &f- &7Ricarica la configurazione"
+    - "/dim spectate <giocatore> &f- &7Osserva un giocatore"
+    - "/dim verbose &f- &7Mostra ogni segnalazione a te, senza buffer"
+    - "/dim log [0-255] &f- &7Carica un registro di debug per le segnalazioni di previsione"
+    - "/dim history <player> &f- &7Lista delle sessioni (più recenti prima)"
+    - "/dim history <player> page <N> &f- &7Salta alla pagina N della lista delle sessioni"
+    - "/dim history <player> session <N|latest> [-d] [-v] &f- &7Dettaglio della sessione (violazioni più recenti prima)"
+    - "/dim history <player> session <N|latest> page <N> [-d] [-v] &f- &7Dettaglio della sessione, pagina N delle violazioni"
     - "&7======================"
 
-# === /grim history ===
+# === /dim history ===
 # UI cronologia basata sulle sessioni. Tutte le righe sotto sono template
 # MiniMessage configurabili. Gli hover predefiniti sono nei tag inline
 # <hover:show_text:'...'> e nelle chiavi frammento hover qui sotto; rimuovi
@@ -103,7 +104,7 @@ grim-history-crashed-marker: " &8(&ccrash&8)"
 #   %client_version% %client_brand% %duration% %timeago%
 #   %violations% %unique_checks% %bucket_size%
 grim-history-detail-header: "%prefix% &bDettaglio sessione &f%ordinal% &bdi &f%player%&b:"
-grim-history-detail-meta1: "%prefix% &bGrim: &f%grim_version%&b, Server: &f%server_name%&b, Durata: &f%duration%&b, Data: &7%timeago% fa"
+grim-history-detail-meta1: "%prefix% &bDim: &f%grim_version%&b, Server: &f%server_name%&b, Durata: &f%duration%&b, Data: &7%timeago% fa"
 grim-history-detail-meta2: "%prefix% &bClient: &f%client_version%&b, Marca: &f%client_brand%"
 grim-history-detail-violations-header: "%prefix% &bViolazioni: &8(%violations% totali, %unique_checks% uniche)"
 grim-history-detail-empty: "%prefix% &7- (nessuna)"

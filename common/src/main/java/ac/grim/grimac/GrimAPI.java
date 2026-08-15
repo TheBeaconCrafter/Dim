@@ -146,7 +146,7 @@ public final class GrimAPI {
 
     private void checkInitialized() {
         if (!initialized) {
-            throw new IllegalStateException("GrimAPI has not been initialized!");
+            throw new IllegalStateException("Dim API has not been initialized!");
         }
     }
 
